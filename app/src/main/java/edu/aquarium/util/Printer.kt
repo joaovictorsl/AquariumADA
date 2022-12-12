@@ -10,6 +10,7 @@ private val menu = """
         5 - Limpar aquário
         6 - Atualizar fator de limpeza
         7 - Aprimorar capacidade de um aquário
+        8 - Listar peixes em aquário
         0 - Sair
     """.trimIndent()
 

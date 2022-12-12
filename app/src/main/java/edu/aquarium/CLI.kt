@@ -24,7 +24,7 @@ class CLI {
         do {
             val input = getUserInput({ printMenu() },
                 {
-                it.toIntOrNull() in 0..7
+                it.toIntOrNull() in 0..8
             }).toInt()
 
             execCommand(input)
@@ -43,6 +43,7 @@ class CLI {
             5 -> cleanAquarium()
             6 -> updateCleaningFactor()
             7 -> upgradeAquariumCapacity()
+            8 -> showFishInAquarium()
         }
     }
 
@@ -157,6 +158,20 @@ class CLI {
     }
 
     /**
+     * Show all fish in the aquarium in a numbered list.
+     */
+    private fun showFishInAquarium() {
+        val a = selectAquarium()
+        var result = "Sem aquários listados."
+
+        a?.let {
+            result = a.showFish()
+        }
+
+        printSection(result)
+    }
+
+    /**
      * Selects an Aquarium and returns it. If aquariumList is empty it returns null.
      */
     private fun selectAquarium(): Aquarium? {
@@ -182,12 +197,9 @@ class CLI {
 private fun MutableList<Aquarium>.asString(): String {
     var result = if (this.size == 0) "Sem aquários listados." else ""
 
-    for (i in 0 until this.size - 1) {
-        val a = this[i]
-        result += "${i + 1} - $a\n"
+    this.forEachIndexed{ i, a ->
+        result += "${i + 1} - $a${if (i == this.size - 1) "\n" else ""}"
     }
-
-    result += "${this.size} - ${this[this.size - 1]}"
 
     return result
 }

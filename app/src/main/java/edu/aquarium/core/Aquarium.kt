@@ -101,4 +101,14 @@ class Aquarium(aquariumCapacity: Capacity, cleaningFactor: Int) {
 
         return result
     }
+
+    fun showFish(): String {
+        var result = if (fishList.size == 0) "Esse aquário ainda não possui peixes." else ""
+
+        fishList.forEachIndexed{ i, f ->
+            result += "${i + 1} - ${f}${if (i != fishList.size - 1) "\n" else ""}"
+        }
+
+        return result
+    }
 }
