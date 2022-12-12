@@ -8,7 +8,7 @@ import java.lang.IllegalArgumentException
 class FishTest {
 
     @Test
-    fun invalidArguments() {
+    fun testInvalidArguments() {
         assertThrows(IllegalArgumentException::class.java) {
             Fish("", Color.RED, Size.SMALL)
         }

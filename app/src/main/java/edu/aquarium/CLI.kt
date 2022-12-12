@@ -1,6 +1,7 @@
 package edu.aquarium
 
 import edu.aquarium.core.Aquarium
+import edu.aquarium.core.Capacity
 import edu.aquarium.core.Color
 import edu.aquarium.core.Size
 import edu.aquarium.util.getUserInput
@@ -23,7 +24,7 @@ class CLI {
         do {
             val input = getUserInput({ printMenu() },
                 {
-                it.toIntOrNull() in 0..6
+                it.toIntOrNull() in 0..7
             }).toInt()
 
             execCommand(input)
@@ -41,6 +42,7 @@ class CLI {
             4 -> feedFish()
             5 -> cleanAquarium()
             6 -> updateCleaningFactor()
+            7 -> upgradeAquariumCapacity()
         }
     }
 
@@ -48,13 +50,12 @@ class CLI {
      * Creates an aquarium and adds it to the aquariumList property.
      */
     private fun createAquarium() {
-        val size = getUserInput(
-            { printSection("Qual o tamanho do aquário? (Limite de peixes)")},
-            {if (it.toIntOrNull() == null) false else it.toInt() > 0},
-            "Apeanas valores maiores que 0 são aceitos."
+        val capacityAsInt = getUserInput(
+            { printSection("Qual o tamanho do aquário?\n${Capacity.options()}")},
+            {it.toIntOrNull() in 1..3}
         ).toInt()
 
-        aquariumList.add(Aquarium(size, cleaningFactor))
+        aquariumList.add(Aquarium(Capacity.toCapacity(capacityAsInt), cleaningFactor))
         printSection("Aquário criado")
     }
 
@@ -139,6 +140,20 @@ class CLI {
             "O fator de limpeza deve ser um número maior que zero."
         ).toInt()
         printSection("Fator de limpeza atualizado.")
+    }
+
+    /**
+     * Updates the capacity of an aquarium. If aquarium is already at max capacity it doesn't upgrade.
+     */
+    private fun upgradeAquariumCapacity() {
+        val a = selectAquarium()
+        var result = "Sem aquários listados."
+
+        a?.let {
+            result = a.upgradeCapacity()
+        }
+
+        printSection(result)
     }
 
     /**

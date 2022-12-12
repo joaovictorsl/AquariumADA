@@ -6,22 +6,22 @@ import kotlin.random.Random
 /**
  * Class which represents an Aquarium. It owns a limit and a cleaningFactor
  *
- * @property limit Limit of fish inside. Must be over 0.
+ * @property aquariumCapacity Capacity of fish inside aquarium.
  * @property cleaningFactor Factor used to define if an aquarium is clean or not. Must be over 0.
  * @property isClean true if aquarium is clean, false otherwise.
  */
-class Aquarium(limit: Int, cleaningFactor: Int) {
-    private val limit: Int
+class Aquarium(aquariumCapacity: Capacity, cleaningFactor: Int) {
+    private var aquariumCapacity: Capacity
     private val fishList = mutableListOf<Fish>()
     private val cleaningFactor: Int
     var isClean = true
         private set
 
     init {
-        if (limit <= 0 || cleaningFactor <= 0)
-            throw IllegalArgumentException("Tamanho e fator de limpeza devem ser maiores que zero.")
+        if (cleaningFactor <= 0)
+            throw IllegalArgumentException("Fator de limpeza deve ser maior que zero.")
 
-        this.limit = limit
+        this.aquariumCapacity = aquariumCapacity
         this.cleaningFactor = cleaningFactor
     }
 
@@ -84,10 +84,21 @@ class Aquarium(limit: Int, cleaningFactor: Int) {
      * Returns true if full, false otherwise.
      */
     private fun isFull(): Boolean {
-        return fishList.size == limit
+        return fishList.size == aquariumCapacity.max()
     }
 
     override fun toString(): String {
-        return "${if(isClean) "Limpo" else "Sujo"} | ${fishList.size}/$limit"
+        return "${if(isClean) "Limpo" else "Sujo"} | ${fishList.size}/${aquariumCapacity.max()}"
+    }
+
+    fun upgradeCapacity(): String {
+        var result = "O aquário já está na capacidade máxima."
+
+        if (aquariumCapacity != Capacity.LARGE) {
+            aquariumCapacity = Capacity.values()[aquariumCapacity.ordinal + 1]
+            result = "Capacidade foi aprimorada. Agora o aquário pode conter ${aquariumCapacity.max()} peixes."
+        }
+
+        return result
     }
 }

@@ -19,7 +19,7 @@ class ColorTest {
     }
 
     @Test
-    fun toColor() {
+    fun testToColor() {
         assertEquals(Color.RED, Color.toColor(1))
         assertEquals(Color.YELLOW, Color.toColor(2))
         assertEquals(Color.GREEN, Color.toColor(3))
@@ -33,7 +33,7 @@ class ColorTest {
     }
 
     @Test
-    fun options() {
+    fun testOptions() {
         val expected = """1 - Vermelho
                 |2 - Amarelo
                 |3 - Verde

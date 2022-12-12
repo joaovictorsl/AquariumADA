@@ -7,28 +7,22 @@ import org.junit.Test
 import java.lang.IllegalArgumentException
 
 class AquariumTest {
-    private lateinit var a: Aquarium
+    private var a: Aquarium = Aquarium(Capacity.SMALL, 2)
 
     @Before
     fun setUp() {
-        a = Aquarium(4, 2)
+        a = Aquarium(Capacity.SMALL, 2)
     }
 
     @Test
-    fun `raises exception when limit or cleaningFactor are negative`() {
+    fun `raises exception when cleaningFactor is negative`() {
         assertThrows(IllegalArgumentException::class.java) {
-            a = Aquarium(-1, 3)
-        }
-        assertThrows(IllegalArgumentException::class.java) {
-            a = Aquarium(1, -3)
-        }
-        assertThrows(IllegalArgumentException::class.java) {
-            a = Aquarium(-1, -3)
+            a = Aquarium(Capacity.SMALL, -3)
         }
     }
 
     @Test
-    fun isClean() {
+    fun testIsClean() {
         val dirtyResponse = "Não é possível adicionar peixes em um aquário sujo. Limpe o aquário e tente novamente."
         assertTrue(a.isClean)
         a.addFish("Jotinha", Color.PURPLE, Size.MEDIUM)
@@ -42,19 +36,20 @@ class AquariumTest {
         assertFalse(a.isClean)
         assertEquals(dirtyResponse, a.addFish("abc", Color.BLACK, Size.LARGE))
         a.clean()
+        assertEquals("Peixe adicionado com sucesso", a.addFish("abc", Color.BLACK, Size.LARGE))
         assertEquals("O aquário está cheio", a.addFish("abc", Color.BLACK, Size.LARGE))
     }
 
     @Test
-    fun addFish() {
-        assertEquals("Limpo | 0/4", a.toString())
+    fun testAddFish() {
+        assertEquals("Limpo | 0/5", a.toString())
         a.addFish("Jotinha", Color.PURPLE, Size.MEDIUM)
         a.addFish("Mamaya", Color.BLUE, Size.SMALL)
-        assertEquals("Sujo | 2/4", a.toString())
+        assertEquals("Sujo | 2/5", a.toString())
     }
 
     @Test
-    fun feedFish() {
+    fun testFeedFish() {
         assertEquals("Não há peixes nesse aquário.", a.feedFish())
         a.addFish("Jotinha", Color.PURPLE, Size.MEDIUM)
         a.addFish("Mamaya", Color.BLUE, Size.SMALL)
@@ -70,11 +65,20 @@ class AquariumTest {
 
     @Test
     fun testToString() {
-        assertEquals("Limpo | 0/4", a.toString())
+        assertEquals("Limpo | 0/5", a.toString())
         a.addFish("Jotinha", Color.PURPLE, Size.MEDIUM)
         a.addFish("Mamaya", Color.BLUE, Size.SMALL)
-        assertEquals("Sujo | 2/4", a.toString())
+        assertEquals("Sujo | 2/5", a.toString())
         a.clean()
-        assertEquals("Limpo | 2/4", a.toString())
+        assertEquals("Limpo | 2/5", a.toString())
+    }
+
+    @Test
+    fun testUpgradeCapacity() {
+        assertEquals(Capacity.SMALL.max(), a.toString().split("/")[1].toInt())
+        a.upgradeCapacity()
+        assertEquals(Capacity.MEDIUM.max(), a.toString().split("/")[1].toInt())
+        a.upgradeCapacity()
+        assertEquals(Capacity.LARGE.max(), a.toString().split("/")[1].toInt())
     }
 }

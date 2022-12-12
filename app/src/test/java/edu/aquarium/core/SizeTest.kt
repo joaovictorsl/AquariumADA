@@ -15,7 +15,7 @@ class SizeTest {
     }
 
     @Test
-    fun toSize() {
+    fun testToSize() {
         assertEquals(Size.SMALL, Size.toSize(1))
         assertEquals(Size.MEDIUM, Size.toSize(2))
         assertEquals(Size.LARGE, Size.toSize(3))
@@ -25,7 +25,7 @@ class SizeTest {
     }
 
     @Test
-    fun options() {
+    fun testOptions() {
         val expected = """1 - Pequeno
                 |2 - Médio
                 |3 - Grande
